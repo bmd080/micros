@@ -33,11 +33,14 @@ target/
 /.DS_Store
 
 # Docker container used data directories
-docker/datas/mongo/configdb/*
-docker/datas/mongo/database/*
+docker/datas/
 
-docker/datas/mysql/database/*
+## docker/datas/mongo/configdb/*
+## docker/datas/mongo/database/*
 
-docker/datas/rabbitmq/*
+## docker/datas/mysql/database/*
 
-docker/datas/redis/database/*
+## docker/datas/rabbitmq/*
+
+## docker/datas/redis/database/*
+
