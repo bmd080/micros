@@ -19,8 +19,8 @@
         <module>micro-turbine</module>
         <module>micro-sleuth</module>
 
-        <module>micro-dlock</module>
         <module>micro-autoid</module>
+        <module>micro-dlock</module>
     </modules>
 
     <parent>

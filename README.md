@@ -4,7 +4,7 @@
 Apache License 2.0.
 
 ## Local config path
-https://github.com/bmd080/micros/tree/master/micro-config
+https://github.com/bmd080/micros/tree/master/config
 
 ## Run maven command
 mvn clean install
