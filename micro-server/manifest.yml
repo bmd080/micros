@@ -1,0 +1,7 @@
+---
+applications:
+- name: micro-server
+  host: micro-server-${random-word}
+  memory: 512M
+  instances: 1
+  path: target/microe-server-0.1.0-SNAPSHOT.jar

@@ -1,0 +1,237 @@
+version: "3.3"
+
+services:
+  microservice-redis:
+    container_name: micro-redis
+    hostname: micro-redis
+    restart: always
+    image: redis:3.0
+    deploy:
+      replicas: 1
+    ports:
+      - "6389:6379"
+  #  configs:
+  #    - source: redis_config
+  #      target: /etc/redis/redis.conf
+    volumes:
+      - ./datas/redis/database:/data/redis
+  #  networks:
+  #    micro-subnet:
+  #      ipv4_address: 172.1.3.21
+  microservice-mongo:
+    container_name: micro-mongo
+    hostname: micro-mongo
+    image: mongo:3.0
+    deploy:
+      replicas: 1
+    ports:
+      - "27027:27017"
+  #  configs:
+  #    - source: redis_config
+  #      target: /etc/redis/redis.conf
+    volumes:
+      - ./datas/mongo/database:/data/db
+      - ./datas/mongo/configdb:/data/configdb
+  #  networks:
+  #    micro-subnet:
+  #      ipv4_address: 172.1.3.22
+  micro-mysql:
+    container_name: micro-mysql
+    hostname: micro-mysql
+    image: mysql:8.0
+    deploy:
+      replicas: 1
+    ports:
+      - "3316:3306"
+  #  configs:
+  #    - source: redis_config
+  #      target: /etc/redis/redis.conf
+    volumes:
+      - ./datas/mysql/database:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=Ms123456
+  #  networks:
+  #    micro-subnet:
+  #      ipv4_address: 172.1.3.22
+  micro-rabbitmq:
+    container_name: micro-rabbitmq
+    hostname: micro-rabbitmq
+    #image: rabbitmq:3.6
+    build:
+      context: ./image/rabbitmq/management
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 1
+    ports:
+      - "5682:5672"
+      - "15682:15672"
+  #  configs:
+  #    - source: redis_config
+  #      target: /etc/redis/redis.conf
+    volumes:
+      - ./datas/rabbitmq:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=Ms123456
+  #  networks:
+  #    micro-subnet:
+  #      ipv4_address: 172.1.3.22
+  micro-eureka:
+    container_name: micro-eureka
+    hostname: micro-eureka
+    image: bmd/micro-eureka
+    ports:
+      - "8761:8761"
+  #  networks:
+  #    micro-subnet:
+  #      ipv4_address: 172.1.3.11
+  micro-config:
+    container_name: micro-config
+    hostname: micro-config
+    image: bmd/micro-config
+    ports:
+      - "8888:8888"
+    links:
+      - micro-eureka
+  #  networks:
+  #    micro-subnet:
+  #      ipv4_address: 172.1.3.12
+  micro-server:
+    container_name: micro-server
+    hostname: micro-server
+    image: bmd/micro-server
+    ports:
+      - "8762:8762"
+    links:
+      - micro-eureka
+      - micro-config
+  #  networks:
+  #    micro-subnet:
+  #      ipv4_address: 172.1.3.13
+  micro-feign:
+    container_name: micro-feign
+    hostname: micro-feign
+    image: bmd/micro-feign
+    ports:
+      - "9000:9000"
+    links:
+      - micro-eureka
+      - micro-config
+  #  networks:
+  #    micro-subnet:
+  #      ipv4_address: 172.1.3.13
+  micro-ribbon:
+    container_name: micro-ribbon
+    hostname: micro-ribbon
+    image: bmd/micro-ribbon
+    ports:
+      - "9005:9005"
+    links:
+      - micro-eureka
+      - micro-config
+  #  networks:
+  #    micro-subnet:
+  #      ipv4_address: 172.1.3.14
+  micro-sleuth:
+    container_name: micro-sleuth
+    hostname: micro-sleuth
+    image: bmd/micro-sleuth
+    ports:
+      - "9411:9411"
+    links:
+      - micro-eureka
+      - micro-config
+  #  networks:
+  #    micro-subnet:
+  #      ipv4_address: 172.1.3.15
+
+  micro-turbine:
+    container_name: micro-turbine
+    hostname: micro-turbine
+    image: bmd/micro-turbine
+    ports:
+      - "10000:10000"
+    links:
+      - micro-eureka
+      - micro-config
+  #  networks:
+  #    micro-subnet:
+  #      ipv4_address: 172.1.3.17
+  micro-autoid:
+    container_name: micro-autoid
+    hostname: micro-autoid
+    image: bmd/micro-autoid
+    ports:
+      - "9006:9006"
+      - "18010:18010"
+    links:
+      - micro-eureka
+      - micro-config
+    environment:
+      #- JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=18000,server=y,suspend=y
+      #- JAVA_OPTS=-Djava.security.egd=file:/dev/./urandom
+  micro-dlock:
+    container_name: micro-dlock
+    hostname: micro-dlock
+    image: bmd/micro-dlock
+    ports:
+      - "9007:9007"
+    links:
+      - micro-eureka
+      - micro-config
+    environment:
+      #- JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,address=18000,server=y,suspend=y
+      #- JAVA_OPTS=-Djava.security.egd=file:/dev/./urandom
+  #  networks:
+  #    micro-subnet:
+  #      ipv4_address: 172.1.3.16
+  #micro-provider:
+  #  container_name: micro-provider
+  #  hostname: micro-provider
+  #  image: bmd/micro-provider
+  #  ports:
+  #    - "8081:8081"
+  #  links:
+  #    - micro-eureka
+  #    - micro-config
+  #    - micro-rabbitmq
+  #    - micro-mongo
+  #  environment:
+  #    - RABBITMQ_HOST_S=micro-rabbitmq
+  #    - RABBITMQ_PORT_S=5682
+  #    - RABBITMQ_USER_S=rabbitmq
+  #    - RABBITMQ_PASS_S=Ms123456
+  #    - MONGODB_HOST_S=micro-mongo
+  #    - MONGODB_PORT_S=27027
+  #micro-consumer:
+  #  container_name: micro-consumer
+  #  hostname: micro-consumer
+  #  image: bmd/micro-consumer
+  #  ports:
+  #    - "9010:9010"
+  #  links:
+  #    - micro-eureka
+  #    - micro-config
+  #    - micro-provider
+  #    - micro-rabbitmq
+  #    - micro-mysql
+  #  environment:
+  #    - RABBITMQ_HOST_S=microservice-rabbitmq
+  #    - RABBITMQ_PORT_S=5682
+  #    - RABBITMQ_USER_S=rabbitmq
+  #    - RABBITMQ_PASS_S=Ms123456
+  #    - MYSQL_HOST_S=microservice-mysql
+  #    - MYSQL_PORT_S=3316
+  #    - MYSQL_ROOT_PASSWORD_S=Ms123456
+#configs:
+#  redis_config:
+#    file: ./config/redis_config.txt
+#  redis_other_config:
+#    external: true
+#networks:
+#  micros-subnet:
+#    driver: bridge
+#    ipam:
+#      driver: default
+#      config:
+#        - subnet: 172.1.3.0/24

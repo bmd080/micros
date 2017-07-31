@@ -1,0 +1,7 @@
+---
+applications:
+- name: micro-config
+  host: micro-config-${random-word}
+  memory: 512M
+  instances: 1
+  path: target/microe-config-0.1.0-SNAPSHOT.jar

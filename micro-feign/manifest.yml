@@ -1,0 +1,7 @@
+---
+applications:
+- name: micro-feign
+  host: micro-feign-${random-word}
+  memory: 512M
+  instances: 1
+  path: target/microe-feign-0.1.0-SNAPSHOT.jar

@@ -1,0 +1,20 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://micro-eureka:8889/eureka/
+spring:
+  application:
+    name: micro-config
+server:
+  port: 8888
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/bmd080/micros
+          searchPaths: config
+          #username: your username
+          #password=your password
+      label: master

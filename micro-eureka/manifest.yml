@@ -1,0 +1,7 @@
+---
+applications:
+- name: micro-eureka
+  host: micro-eureka-${random-word}
+  memory: 512M
+  instances: 1
+  path: target/microe-eureka-0.1.0-SNAPSHOT.jar

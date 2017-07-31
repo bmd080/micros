@@ -1,0 +1,7 @@
+---
+applications:
+- name: micro-turbine
+  host: micro-turbine-${random-word}
+  memory: 512M
+  instances: 1
+  path: target/microe-turbine-0.1.0-SNAPSHOT.jar

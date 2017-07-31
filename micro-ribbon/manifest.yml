@@ -1,0 +1,7 @@
+---
+applications:
+- name: micro-ribbon
+  host: micro-ribbon-${random-word}
+  memory: 512M
+  instances: 1
+  path: target/microe-ribbon-0.1.0-SNAPSHOT.jar

@@ -1,0 +1,10 @@
+---
+applications:
+- name: micro-autoid
+  host: micro-autoid-${random-word}
+  memory: 512M
+  instances: 1
+  path: target/microe-autoid-0.1.0-SNAPSHOT.jar
+
+env:
+ JAVA_OPTS: "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=18010"

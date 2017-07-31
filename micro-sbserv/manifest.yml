@@ -1,0 +1,7 @@
+---
+applications:
+- name: micro-sbserv
+  host: micro-sbserv-${random-word}
+  memory: 512M
+  instances: 1
+  path: target/microe-sbserv-0.1.0-SNAPSHOT.jar

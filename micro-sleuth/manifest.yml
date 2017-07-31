@@ -1,0 +1,7 @@
+---
+applications:
+- name: micro-sleuth
+  host: micro-sleuth-${random-word}
+  memory: 512M
+  instances: 1
+  path: target/microe-sleuth-0.1.0-SNAPSHOT.jar
